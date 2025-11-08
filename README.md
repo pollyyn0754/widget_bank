@@ -48,9 +48,12 @@ pip install poetry
 
     ```python
     
-    
     ```
   
     + `sort_by_date`, принимает список словарей и необязательный параметр, задающий порядок сортировки 
     (по умолчанию — убывание). Функция должна возвращать новый список, отсортированный по дате (`date`).
+
+    ```python
+    sorted_state = sorted(state, key=lambda state: state["date"], reverse=True)
+    ```
   
