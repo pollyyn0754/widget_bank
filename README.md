@@ -2,18 +2,19 @@
 
 ## Описание:
 
-Учебный проект - это виджет, который показывает несколько последних успешных
-банковских операций клиента.
+Учебный проект - это разработка бэкенд-сервиса на Python для нового виджета,
+который обеспечивает подготовку и предоставление данных для отображения
+последних успешных банковских операций в личном кабинете клиента.
 
 ## Установка:
 
 1. Клонируйте репозиторий:
-```
+```bash
 git clone https://github.com/pollyyn0754/widget_bank
 ```
 
 2. Установите зависимости:
-```
+```bash
 pip install poetry
 ```
 
@@ -47,13 +48,13 @@ pip install poetry
     те словари, у которых ключ`state` соответствует указанному значению.
 
     ```python
-    
+    filter_operations = [operation for operation in operations if operation.get("state") == state]
     ```
   
     + `sort_by_date`, принимает список словарей и необязательный параметр, задающий порядок сортировки 
     (по умолчанию — убывание). Функция должна возвращать новый список, отсортированный по дате (`date`).
 
     ```python
-    sorted_state = sorted(state, key=lambda state: state["date"], reverse=True)
+    sorted_operations = sorted(operations, key=lambda operations: operations["date"], reverse=reverse)
     ```
   

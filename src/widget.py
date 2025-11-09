@@ -7,7 +7,7 @@ def mask_account_card(account_card: str) -> str:
         return account_card[:-12] + " " + account_card[-12:-10] + "** **** " + account_card[-4:]
 
 
-def get_date(operation_info: str) -> str:
+def get_date(date_info: str) -> str:
     """Функция, которая принимает строку с информацией об операции и
     возвращает строку с датой в формате ДД.ММ.ГГГГ"""
-    return ".".join([operation_info[8:10], operation_info[5:7], operation_info[:4]])
+    return ".".join([date_info[8:10], date_info[5:7], date_info[:4]])
