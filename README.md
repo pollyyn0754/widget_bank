@@ -58,6 +58,63 @@ pip install poetry
     ```python
     sorted_operations = sorted(operations, key=lambda operations: operations["date"], reverse=reverse)
     ```
+
++ Модуль `generators` содержит функции, реализующие генераторы для обработки данных.
+    + `filter_by_currency` принимает на вход список словарей, представляющих транзакции и возвращает 
+    итератор, который поочередно выдает транзакции, где валюта операции соответствует заданной.
+    
+    ```python
+    usd_transactions = filter_by_currency(transactions, "USD")
+    for _ in range(1):
+        print(next(usd_transactions))
+
+    >>>
+    {
+        "id": 939719570,
+        "state": "EXECUTED",
+        "date": "2018-06-30T02:08:58.425572",
+        "operationAmount": {
+            "amount": "9824.07",
+            "currency": {
+                "name": "USD",
+                "code": "USD"
+            }
+        },
+        "description": "Перевод организации",
+        "from": "Счет 75106830613657916952",
+        "to": "Счет 11776614605963066702"
+    }
+    ```
+
+    + `transaction_descriptions` принимает список словарей с транзакциями и возвращает описание каждой 
+    операции по очереди.
+    
+    ```python
+    descriptions = transaction_descriptions(transactions)
+    for _ in range(5):
+        print(next(descriptions))
+
+    >>> Перевод организации
+        Перевод со счета на счет
+        Перевод со счета на счет
+        Перевод с карты на карту
+        Перевод организации
+    ```
+    + `card_number_generator` выдает номера банковских карт в формате XXXX XXXX XXXX XXXX , 
+    где X — цифра номера карты. Генератор может сгенерировать номера карт в заданном диапазоне 
+    от 0000 0000 0000 0001 до 9999 9999 9999 9999.
+    
+    ```python
+    for card_number in card_number_generator(1, 5):
+        print(card_number)
+
+    >>> 0000 0000 0000 0001
+        0000 0000 0000 0002
+        0000 0000 0000 0003
+        0000 0000 0000 0004
+        0000 0000 0000 0005
+    ```
+
 ### Тестирование
 В пакете `tests` написаны тесты ко всем функциям проекта. Модули тестируются в отдельных тестовых файлах. 
 Тесты запускаются командой:
