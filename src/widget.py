@@ -14,9 +14,10 @@ def mask_account_card(account_card: str) -> str:
 def get_date(date_info: str) -> str:
     """Функция, которая принимает строку с информацией об операции и
     возвращает строку с датой в формате ДД.ММ.ГГГГ"""
-    if len(date_info) == 26 and date_info[4] == '-' and date_info[7] == '-':
-        if date_info[10] == 'T' and date_info[19] == '.':
-            if date_info[13] == ':' and date_info[16] == ':':
+    if (
+        len(date_info) == 26 and date_info[4] == '-' and date_info[7] == '-'
+        and date_info[10] == 'T' and date_info[19] == '.'
+        and date_info[13] == ':' and date_info[16] == ':'):
                 return ".".join([date_info[8:10], date_info[5:7], date_info[:4]])
     elif not isinstance(date_info, str):
         raise TypeError('Некорректный формат данных')
