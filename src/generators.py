@@ -10,7 +10,8 @@ def filter_by_currency(transactions: List, currency_code: str) -> Iterator:
 
     for transaction in transactions:
         if (
-            isinstance(transaction, dict) and "operationAmount" in transaction
+            isinstance(transaction, dict)
+            and "operationAmount" in transaction
             and "currency" in transaction["operationAmount"]
             and "code" in transaction["operationAmount"]["currency"]
             and transaction["operationAmount"]["currency"]["code"] == currency_code
@@ -30,14 +31,14 @@ def transaction_descriptions(transactions: List) -> Iterator:
             yield transaction["description"]
 
 
-def card_number_generator(start_number: int, end_number: int) -> Iterator:
+def card_number_generator(start: int, stop: int) -> Iterator:
     """Функция, которая выдает номера банковских карт в заданном диапазоне"""
 
-    if not isinstance(start_number, int) or not isinstance(end_number, int):
+    if not isinstance(start, int) or not isinstance(stop, int):
         raise TypeError("Некорректный формат введенного диапазона")
-    if not (1 <= start_number <= end_number <= 9999999999999999):
+    if not (1 <= start <= stop <= 9999999999999999):
         raise ValueError("Некорректный формат введенного диапазона")
 
-    for card_number_int in range(start_number, end_number + 1):
+    for card_number_int in range(start, stop + 1):
         card_number = f"{card_number_int:016d}"
         yield " ".join([card_number[:4], card_number[4:8], card_number[8:12], card_number[12:]])

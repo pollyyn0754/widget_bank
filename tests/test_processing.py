@@ -6,7 +6,9 @@ import pytest
 from src.processing import filter_by_state, sort_by_date
 
 
-@pytest.mark.parametrize("operations, sorted_operations, state_value", [
+@pytest.mark.parametrize(
+    "operations, sorted_operations, state_value",
+    [
         (
             [
                 {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -48,9 +50,8 @@ def test_filter_by_state(operations, sorted_operations, state_value):
     filter_by_state(operations, state=state_value) == sorted_operations
 
 
-def test_filter_by_state_exception_1(empty_list):
-    with pytest.raises(TypeError):
-        filter_by_state(empty_list)
+def test_filter_by_state_empty_list(empty_list):
+    assert filter_by_state(empty_list) == []
 
 
 def test_filter_by_state_exception_2(invalid_list):
@@ -93,9 +94,8 @@ def test_sort_by_date(operations, date_value):
     sort_by_date(operations) == date_value
 
 
-def test_sort_by_date_exception_1(empty_list):
-    with pytest.raises(TypeError):
-        sort_by_date(empty_list)
+def test_sort_by_date_empty_list(empty_list):
+    assert sort_by_date(empty_list) == []
 
 
 def test_sort_by_date_exception_2(invalid_list):

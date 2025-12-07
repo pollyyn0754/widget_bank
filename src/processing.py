@@ -10,7 +10,7 @@ def filter_by_state(operations: List, state: str = "EXECUTED") -> List:
         raise TypeError("Некорректный формат данных")
     for operation in operations:
         if not isinstance(operation, Dict):
-            raise ValueError("Некорректный формат данных")
+            raise TypeError("Некорректный формат данных")
         elif "id" not in operation or "state" not in operation or "date" not in operation:
             raise ValueError("Некорректный формат данных")
 
@@ -26,7 +26,7 @@ def sort_by_date(operations: List, reverse: bool = True) -> List:
         raise TypeError("Некорректный формат данных")
     for operation in operations:
         if not isinstance(operation, Dict):
-            raise ValueError("Некорректный формат данных")
+            raise TypeError("Некорректный формат данных")
         elif "id" not in operation or "state" not in operation or "date" not in operation:
             raise ValueError("Некорректный формат данных")
 
