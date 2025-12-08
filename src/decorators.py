@@ -8,10 +8,10 @@ def log(filename: Optional[str] = None) -> Callable:
     а также ее результаты или возникшие ошибки. Принимает необязательный аргумент filename,
     который определяет, куда будут записываться логи"""
 
-    def decorator(func):
+    def decorator(func: Callable) -> Callable:
 
         @wraps(func)
-        def wrapper(*args, **kwargs) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             start_time = ctime()
             try:
                 result = func(*args, **kwargs)
@@ -19,15 +19,15 @@ def log(filename: Optional[str] = None) -> Callable:
                 log_info = (
                     f"{start_time} Начало выполнения функции '{func.__name__}'. "
                     f"Параметры: args={args}, kwargs={kwargs}\n"
-                    f"{stop_time} Функция '{func.__name__}' успешно завершена. Результат: {result}."
+                    f"{stop_time} Функция '{func.__name__}' успешно завершена. Результат: {result}.\n"
                 )
                 return result
             except Exception as e:
                 log_info = (
-                    f"{start_time} Начало выполнения функции '{func.__name__}'. "
-                    f"Ошибка при выполнении функции '{func.__name__}'. "
-                    f"Тип ошибки: {type(e).__name__}. \n"
-                    f"Параметры: args={args}, kwargs={kwargs}"
+                    f"{start_time} Начало выполнения функции '{func.__name__}'."
+                    f"Ошибка при выполнении функции '{func.__name__}'.\n"
+                    f"Тип ошибки: {type(e).__name__}."
+                    f"Параметры: args={args}, kwargs={kwargs}\n"
                 )
                 raise
             finally:
@@ -40,10 +40,3 @@ def log(filename: Optional[str] = None) -> Callable:
         return wrapper
 
     return decorator
-
-
-@log()
-def func(x, y):
-    return str(x + y)
-
-func(1, '2')
