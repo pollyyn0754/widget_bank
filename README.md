@@ -124,6 +124,36 @@ pip install poetry
     Mon Dec  8 23:47:19 2025 Начало выполнения функции 'example_function'. 
     Ошибка при выполнении функции 'example_function'. Тип ошибки: ValueError. Параметры: args=(), kwargs={}
     ```
++ Модуль `utils` включает в себя две функции:
+  + `open_json`, которая принимает на вход путь до JSON-файла и возвращает список словарей с данными о 
+    финансовых транзакциях. Если файл пустой, содержит не список или не найден, функция возвращает пустой список.
+    ```python
+    def open_json(file_json: str) -> List[Dict]:
+
+    try:
+        with open(file_json, "r", encoding="utf-8") as file:
+            list_from_file = json.load(file)
+
+        if (
+            isinstance(list_from_file, List) 
+            and all(isinstance(item, Dict) for item in list_from_file
+        ):
+            return list_from_file
+        else:
+            return []
+    ```
+  + `external_api`, которая принимает на вход транзакцию и возвращает сумму транзакции (amount) в рублях, 
+    тип данных — float. Если транзакция была в USD или EUR, происходит обращение к внешнему API для получения 
+    текущего курса валют и конвертации суммы операции в рубли.
+    ```python
+    transaction_rub = external_api(
+        {"operationAmount": {"amount": 100.50, "currency": {"code": "RUB"}}}
+    )
+    print(transaction_rub)
+    
+    >>> 100.5
+    ```
+
 ### Тестирование
 В пакете `tests` написаны тесты ко всем функциям проекта. Модули тестируются в отдельных тестовых файлах. 
 Тесты запускаются командой:

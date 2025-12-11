@@ -1,5 +1,5 @@
 # mypy: disable-error-code="no-untyped-def"
-
+import json
 import pytest
 
 
@@ -82,3 +82,28 @@ def sample_transactions():
             "to": "Счет 14211924144426031657",
         },
     ]
+
+
+@pytest.fixture
+def mock_create_json(tmp_path):
+
+    def create_file(filename, content):
+        file_path = tmp_path / filename
+        with open(file_path, "w", encoding="utf-8") as f:
+            if isinstance(content, str):
+                f.write(content)
+            else:
+                json.dump(content, f)
+        return str(file_path)
+
+    return create_file
+
+
+@pytest.fixture
+def transaction_rub():
+    return {"operationAmount": {"amount": 100.50, "currency": {"code": "RUB"}}}
+
+
+@pytest.fixture
+def transaction_usd():
+    return {"operationAmount": {"amount": 100.0, "currency": {"code": "USD"}}}
