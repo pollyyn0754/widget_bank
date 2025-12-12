@@ -1,10 +1,10 @@
 import json
-import os
-import requests
 import logging
-from dotenv import load_dotenv
-from typing import List, Dict, Optional
+import os
+from typing import Dict, List, Optional
 
+import requests
+from dotenv import load_dotenv
 
 logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)

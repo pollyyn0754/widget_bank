@@ -1,5 +1,6 @@
 # mypy: disable-error-code="no-untyped-def"
 import json
+
 import pytest
 
 

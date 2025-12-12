@@ -1,8 +1,10 @@
 # mypy: disable-error-code="no-untyped-def"
+from unittest.mock import MagicMock, patch
+
 import pytest
 import requests
-from unittest.mock import patch, MagicMock
-from src.utils import open_json, external_api
+
+from src.utils import external_api, open_json
 
 
 def test_open_json_valid(mock_create_json):
