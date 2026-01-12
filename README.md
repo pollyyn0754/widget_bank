@@ -153,6 +153,27 @@ pip install poetry
     
     >>> 100.5
     ```
++ Модуль `importers` включает в себя две функции:
+  + `read_csv_transactions`, которая принимает на вход путь до csv-файла и возвращает двумерную таблицу
+    с данными о финансовых транзакциях.
+    ```python
+    def read_csv_transactions(filepath: str) -> pd.DataFrame:
+    
+        try:
+            df = pd.read_csv(filepath)
+            print(f"Успешно прочитано {len(df)} строк из CSV.")
+            return df
+    ```
+  + `read_xlsx_transactions`, которая принимает на вход путь до xlsx-файла и возвращает двумерную таблицу
+    с данными о финансовых транзакциях.
+    ```python
+    def read_xlsx_transactions(filepath: str, sheet_name=0) -> pd.DataFrame:
+    
+        try:
+            df = pd.read_excel(filepath, sheet_name=sheet_name)
+            print(f"Успешно прочитано {len(df)} строк из XLSX (лист: {sheet_name}).")
+            return df
+    ```
 
 ### Тестирование
 В пакете `tests` написаны тесты ко всем функциям проекта. Модули тестируются в отдельных тестовых файлах. 
