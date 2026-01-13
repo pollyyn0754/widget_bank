@@ -108,3 +108,8 @@ def transaction_rub():
 @pytest.fixture
 def transaction_usd():
     return {"operationAmount": {"amount": 100.0, "currency": {"code": "USD"}}}
+
+
+@pytest.fixture
+def categories():
+    return ["Перевод организации", "Открытие вклада", "Перевод со счета на счет"]

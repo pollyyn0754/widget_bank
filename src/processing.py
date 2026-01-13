@@ -1,3 +1,5 @@
+import re
+from collections import Counter
 from typing import Dict, List
 
 
@@ -32,3 +34,21 @@ def sort_by_date(operations: List, reverse: bool = True) -> List:
 
     sorted_operations = sorted(operations, key=lambda operations: operations["date"], reverse=reverse)
     return sorted_operations
+
+
+def process_bank_search(data: list[dict], search: str) -> list[dict]:
+    """Фильтрует транзакции по наличию строки в ключе 'description'."""
+    pattern = re.compile(re.escape(search), re.IGNORECASE)
+
+    return [item for item in data if item.get("description") and pattern.search(item["description"])]
+
+
+def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """Подсчитывает количество операций в каждой из заданных категорий.
+    Категория берется из поля 'description'."""
+
+    descriptions = [op.get("description") for op in data if "description" in op]
+
+    counts = Counter(descriptions)
+
+    return {category: counts.get(category, 0) for category in categories}

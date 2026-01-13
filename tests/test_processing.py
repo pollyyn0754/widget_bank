@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state, process_bank_operations, process_bank_search, sort_by_date
 
 
 @pytest.mark.parametrize(
@@ -100,3 +100,31 @@ def test_sort_by_date_empty_list(empty_list):
 def test_sort_by_date_exception_2(invalid_list):
     with pytest.raises(ValueError):
         sort_by_date(invalid_list)
+
+
+def test_process_bank_search(sample_transactions):
+    result = process_bank_search(sample_transactions, "перевод")
+    assert len(result) == 5
+    assert result[0]["description"] == "Перевод организации"
+
+
+def test_process_bank_search_empty():
+    assert process_bank_search([], "test") == []
+
+
+def test_process_bank_search_no_description_key(invalid_list):
+    assert process_bank_search(invalid_list, "test") == []
+
+
+def test_process_bank_operations(sample_transactions, categories):
+    result = process_bank_operations(sample_transactions, categories)
+    assert result == {"Открытие вклада": 0, "Перевод организации": 2, "Перевод со счета на счет": 2}
+
+
+def test_process_bank_operations_empty(empty_list, categories):
+    result = process_bank_operations(empty_list, categories)
+    assert result == {"Открытие вклада": 0, "Перевод организации": 0, "Перевод со счета на счет": 0}
+
+
+def test_process_bank_operations_no_categories(sample_transactions):
+    assert process_bank_operations(sample_transactions, []) == {}
