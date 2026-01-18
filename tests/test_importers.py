@@ -1,68 +1,66 @@
 # mypy: disable-error-code="no-untyped-def"
 
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
-import pandas as pd
+from src.importers import open_csv_transactions, open_xlsx_transactions
 
-from src.importers import read_csv_transactions, read_xlsx_transactions
+
+def test_open_csv_not_found():
+    # Проверка поведения при отсутствии csv файла.
+    assert open_csv_transactions("non_existent.csv") == []
 
 
 @patch("os.path.exists")
 @patch("pandas.read_csv")
-def test_read_csv_transactions_success(mock_read_csv, mock_exists):
-    """Тест успешного чтения CSV."""
+def test_open_csv_success(mock_read_csv, mock_exists):
+    # Проверка успешного чтения csv.
     mock_exists.return_value = True
-    # Создаем фейковый DataFrame
-    mock_df = pd.DataFrame({"id": [11, 22], "amount": [1000, 2000]})
+    # Создаем фейковый DataFrame и его метод to_dict
+    mock_df = MagicMock()
+    mock_df.to_dict.return_value = [{"id": 11, "amount": 1000}]
     mock_read_csv.return_value = mock_df
 
-    result = read_csv_transactions("test.csv")
+    result = open_csv_transactions("fake.csv")
 
-    assert result.shape == (2, 2)
-    assert len(result) == 2
-    assert list(result.columns) == ["id", "amount"]
-    mock_read_csv.assert_called_once_with("test.csv")
+    assert result == [{"id": 11, "amount": 1000}]
+    mock_read_csv.assert_called_once_with("fake.csv", delimiter=';')
+
+
+@patch("os.path.exists")
+@patch("pandas.read_csv")
+def test_open_csv_error(mock_read_csv, mock_exists):
+    # Проверка обработки ошибки (например, файл поврежден).
+    mock_exists.return_value = True
+    mock_read_csv.side_effect = Exception("Read error")
+
+    assert open_csv_transactions("broken.csv") == []
+
+
+def test_open_xlsx_not_found():
+    # Проверка поведения при отсутствии XLSX файла.
+    assert open_xlsx_transactions("non_existent.xlsx") == []
 
 
 @patch("os.path.exists")
 @patch("pandas.read_excel")
-def test_read_xlsx_transactions_success(mock_read_excel, mock_exists):
-    """Тест успешного чтения XLSX."""
+def test_open_xlsx_success(mock_read_excel, mock_exists):
+    # Проверка успешного чтения Excel.
     mock_exists.return_value = True
-    mock_df = pd.DataFrame({"id": [1], "amount": [1000]})
+    mock_df = MagicMock()
+    mock_df.to_dict.return_value = [{"id": 22, "amount": 2000}]
     mock_read_excel.return_value = mock_df
 
-    result = read_xlsx_transactions("test.xlsx")
+    result = open_xlsx_transactions("fake.xlsx")
 
-    assert result.shape == (1, 2)
-    assert not result.empty
-    assert result.iloc[0]["amount"] == 1000
-    mock_read_excel.assert_called_once()
+    assert result == [{"id": 22, "amount": 2000}]
+    mock_read_excel.assert_called_once_with("fake.xlsx")
 
 
 @patch("os.path.exists")
-def test_read_file_not_found(mock_exists):
-    """Тест поведения, если файл отсутствует."""
-    mock_exists.return_value = False
-
-    # Проверяем для CSV
-    result_csv = read_csv_transactions("missing.csv")
-    # Проверяем для XLSX
-    result_xlsx = read_xlsx_transactions("missing.xlsx")
-
-    assert result_csv.empty
-    assert result_xlsx.empty
-    assert isinstance(result_csv, pd.DataFrame)
-
-
-@patch("os.path.exists")
-@patch("pandas.read_csv")
-def test_read_csv_handle_exception(mock_read_csv, mock_exists):
-    """Тест обработки исключения при чтении поврежденного CSV."""
+@patch("pandas.read_excel")
+def test_open_xlsx_empty_file(mock_read_excel, mock_exists):
+    # Проверка обработки пустого или некорректного Excel файла.
     mock_exists.return_value = True
-    mock_read_csv.side_effect = Exception("Pandas error")
+    mock_read_excel.side_effect = Exception("Format error")
 
-    result = read_csv_transactions("corrupt.csv")
-
-    assert result.empty
-    mock_read_csv.assert_called_once()
+    assert open_xlsx_transactions("invalid.xlsx") == []

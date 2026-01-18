@@ -20,9 +20,9 @@ def get_date(date_info: str) -> str:
     if not isinstance(date_info, str):
         raise TypeError("Некорректный формат данных")
 
-    pattern = re.compile(r'(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2}:\d{2}.\d{6})')
-    match = pattern.fullmatch(date_info)
+    pattern = re.compile(r"(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2}:\d{2})")
+    match = pattern.search(date_info)
     if match:
-        return f'{match.group(3)}.{match.group(2)}.{match.group(1)}'
+        return f"{match.group(3)}.{match.group(2)}.{match.group(1)}"
     else:
         raise ValueError("Некорректный формат данных")

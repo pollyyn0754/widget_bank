@@ -13,8 +13,6 @@ def filter_by_state(operations: List, state: str = "EXECUTED") -> List:
     for operation in operations:
         if not isinstance(operation, Dict):
             raise TypeError("Некорректный формат данных")
-        elif "id" not in operation or "state" not in operation or "date" not in operation:
-            raise ValueError("Некорректный формат данных")
 
     filter_operations = [operation for operation in operations if operation.get("state") == state]
     return filter_operations
@@ -29,26 +27,23 @@ def sort_by_date(operations: List, reverse: bool = True) -> List:
     for operation in operations:
         if not isinstance(operation, Dict):
             raise TypeError("Некорректный формат данных")
-        elif "id" not in operation or "state" not in operation or "date" not in operation:
-            raise ValueError("Некорректный формат данных")
 
     sorted_operations = sorted(operations, key=lambda operations: operations["date"], reverse=reverse)
     return sorted_operations
 
 
-def process_bank_search(data: list[dict], search: str) -> list[dict]:
+def process_bank_search(operations: list[dict], search: str) -> list[dict]:
     """Фильтрует транзакции по наличию строки в ключе 'description'."""
     pattern = re.compile(re.escape(search), re.IGNORECASE)
 
-    return [item for item in data if item.get("description") and pattern.search(item["description"])]
+    return [item for item in operations if item.get("description") and pattern.search(item["description"])]
 
 
-def process_bank_operations(data: list[dict], categories: list) -> dict:
+def process_bank_operations(operations: list[dict], categories: list) -> dict:
     """Подсчитывает количество операций в каждой из заданных категорий.
     Категория берется из поля 'description'."""
 
-    descriptions = [op.get("description") for op in data if "description" in op]
-
+    descriptions = [op.get("description") for op in operations if "description" in op]
     counts = Counter(descriptions)
 
     return {category: counts.get(category, 0) for category in categories}

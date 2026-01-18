@@ -53,11 +53,6 @@ def test_filter_by_state_empty_list(empty_list):
     assert filter_by_state(empty_list) == []
 
 
-def test_filter_by_state_exception_2(invalid_list):
-    with pytest.raises(ValueError):
-        filter_by_state(invalid_list)
-
-
 @pytest.mark.parametrize(
     "operations, date_value",
     [
@@ -95,11 +90,6 @@ def test_sort_by_date(operations, date_value):
 
 def test_sort_by_date_empty_list(empty_list):
     assert sort_by_date(empty_list) == []
-
-
-def test_sort_by_date_exception_2(invalid_list):
-    with pytest.raises(ValueError):
-        sort_by_date(invalid_list)
 
 
 def test_process_bank_search(sample_transactions):
