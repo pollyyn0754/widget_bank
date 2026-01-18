@@ -1,6 +1,6 @@
 # mypy: disable-error-code="no-untyped-def"
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from src.importers import open_csv_transactions, open_xlsx_transactions
 
@@ -23,7 +23,7 @@ def test_open_csv_success(mock_read_csv, mock_exists):
     result = open_csv_transactions("fake.csv")
 
     assert result == [{"id": 11, "amount": 1000}]
-    mock_read_csv.assert_called_once_with("fake.csv", delimiter=';')
+    mock_read_csv.assert_called_once_with("fake.csv", delimiter=";")
 
 
 @patch("os.path.exists")
