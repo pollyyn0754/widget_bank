@@ -25,13 +25,13 @@ def main() -> None:
         operations = []
         if choice_file == "1":
             print("Программа: Для обработки выбран JSON-файл.")
-            operations = open_json(os.path.join("data", "operations.json"))
+            operations = open_json(os.path.join('data', "operations.json"))
         elif choice_file == "2":
             print("Программа: Для обработки выбран CSV-файл.")
-            operations = open_csv_transactions(os.path.join("data", "transactions.csv"))
+            operations = open_csv_transactions(os.path.join('data', "transactions.csv"))
         elif choice_file == "3":
             print("Программа: Для обработки выбран XLSX-файл.")
-            operations = open_xlsx_transactions(os.path.join("data", "transactions_excel.xlsx"))
+            operations = open_xlsx_transactions(os.path.join('data', "transactions_excel.xlsx"))
 
         if operations == []:
             print("Файл не найден")

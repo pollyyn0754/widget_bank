@@ -1,16 +1,16 @@
 # mypy: disable-error-code="no-untyped-def"
 from unittest.mock import patch
 
-from src.main import main
+from main import main
 
 
-@patch("src.main.open_json")
-@patch("src.main.filter_by_state")
-@patch("src.main.sort_by_date")
-@patch("src.main.filter_by_currency")
-@patch("src.main.process_bank_search")
-@patch("src.main.mask_account_card")
-@patch("src.main.get_date")
+@patch("main.open_json")
+@patch("main.filter_by_state")
+@patch("main.sort_by_date")
+@patch("main.filter_by_currency")
+@patch("main.process_bank_search")
+@patch("main.mask_account_card")
+@patch("main.get_date")
 @patch("builtins.input")
 def test_main_full_chain(
     mock_input,
@@ -72,8 +72,8 @@ def test_main_full_chain(
     assert "Visa **1111" in captured
 
 
-@patch("src.main.open_json")
-@patch("src.main.filter_by_state")
+@patch("main.open_json")
+@patch("main.filter_by_state")
 @patch("builtins.input")
 def test_main_json_flow(mock_input, mock_filter, mock_open_json, capsys):
     # Тест основного сценария: JSON, фильтрация по статусу, без доп. фильтров.
@@ -89,8 +89,8 @@ def test_main_json_flow(mock_input, mock_filter, mock_open_json, capsys):
     ]
 
     # Запускаем функцию
-    with patch("src.main.mask_account_card", return_value="**1234"):
-        with patch("src.main.get_date", return_value="01.01.2023"):
+    with patch("main.mask_account_card", return_value="**1234"):
+        with patch("main.get_date", return_value="01.01.2023"):
             main()
 
     # Проверяем консольный вывод
@@ -113,8 +113,8 @@ def test_main_invalid_status_retry(mock_input, capsys):
         "нет",
     ]
 
-    with patch("src.main.open_json", return_value=[{"id": 1}]):
-        with patch("src.main.filter_by_state", return_value=[]):
+    with patch("main.open_json", return_value=[{"id": 1}]):
+        with patch("main.filter_by_state", return_value=[]):
             main()
 
     captured = capsys.readouterr().out
@@ -122,7 +122,7 @@ def test_main_invalid_status_retry(mock_input, capsys):
     assert 'Операции отфильтрованы по статусу "EXECUTED"' in captured
 
 
-@patch("src.main.open_csv_transactions")
+@patch("main.open_csv_transactions")
 @patch("builtins.input")
 def test_main_empty_results(mock_input, mock_open_csv, capsys):
     # Тест вывода, когда транзакции не найдены.
@@ -131,7 +131,7 @@ def test_main_empty_results(mock_input, mock_open_csv, capsys):
     mock_open_csv.return_value = [{"id": 1}]
 
     # Имитируем, что фильтр вернул пустой список
-    with patch("src.main.filter_by_state", return_value=[]):
+    with patch("main.filter_by_state", return_value=[]):
         main()
 
     captured = capsys.readouterr().out
@@ -145,9 +145,9 @@ def test_main_file_not_found_retry(mock_input, capsys):
     # Сначала выбираем 1 (файл не найден), потом 2 (успешно)
     mock_input.side_effect = ["1", "2", "EXECUTED", "нет", "нет", "нет"]
 
-    with patch("src.main.open_json", return_value=[]):  # Пустой список имитирует "не найден"
-        with patch("src.main.open_csv_transactions", return_value=[{"id": 1}]):
-            with patch("src.main.filter_by_state", return_value=[]):
+    with patch("main.open_json", return_value=[]):  # Пустой список имитирует "не найден"
+        with patch("main.open_csv_transactions", return_value=[{"id": 1}]):
+            with patch("main.filter_by_state", return_value=[]):
                 main()
 
     captured = capsys.readouterr().out

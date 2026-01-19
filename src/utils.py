@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 logger = logging.getLogger("utils")
 logger.setLevel(logging.DEBUG)
 
+os.makedirs("widget_bank/logs/utils.log", exist_ok=True)
+
 file_handler = logging.FileHandler("logs/utils.log", mode="w", encoding="utf-8")
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(formatter)
